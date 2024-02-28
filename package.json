@@ -1,0 +1,110 @@
+{
+  "name": "hisunaimock",
+  "displayName": "HisunAIMock",
+  "description": "基于 AI 自动识别接口文档生成 Mock 数据",
+  "version": "1.0.0",
+  "publisher": "hisun",
+  "icon": "hisunailogo.png",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "AI 模型提供方",
+      "properties": {
+        "hisunmock.modelProvider": {
+          "type": "string",
+          "enum": [
+            "OpenAI"
+          ],
+          "default": "OpenAI",
+          "description": "选择 AI 模型提供方"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "hisunmock.selectedDocumentGeneration",
+        "title": "根据选中的文本生成 Mock 数据",
+        "description": "根据选中的文本生成 Mock 数据",
+        "category": "HisunAIMock"
+      },
+      {
+        "command": "hisunmock.wordGeneration",
+        "title": "从 Docx 文档生成 Mock 数据",
+        "description": "从 Docx 文档生成 Mock 数据",
+        "category": "HisunAIMock"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "hisunmock/mySubMenu",
+        "label": "HisunAIMock"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "group": "HisunAIMockMenu",
+          "submenu": "hisunmock/mySubMenu"
+        }
+      ],
+      "hisunmock/mySubMenu": [
+        {
+          "command": "hisunmock.wordGeneration",
+          "group": "hisunmock.mygroup1@1"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "hisunmock.selectedDocumentGeneration",
+          "group": "hisunmock.mygroup1@2"
+        }
+      ]
+    },
+    "icons": {
+      "hisunCodeX-dark": {
+        "description": "Hisun icon",
+        "default": {
+          "fontPath": "./hisunlogo.woff",
+          "fontCharacter": "\\ea01"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.70.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^5.1.4",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.9"
+  },
+  "dependencies": {
+    "axios": "1.6.7",
+    "html-to-md": "0.8.5",
+    "mammoth": "1.7.0",
+    "openai": "4.28.0"
+  }
+}
