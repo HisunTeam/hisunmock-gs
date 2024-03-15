@@ -3,7 +3,7 @@ name: Node.js CI with Release
 on:
   push:
     branches:
-      - main  # 或你的默认分支
+      - main
 
 jobs:
   build-and-release:
@@ -27,9 +27,8 @@ jobs:
       run: |
         echo y | vsce package
 
-    - name: Get Version from package.json
-      id: get_version
-      run: echo "::set-output name=VERSION::$(jq -r '.version' package.json)"
+    - name: Get Version from package.json and Set to Env
+      run: echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
 
     - name: Create Release
       id: create_release
@@ -37,8 +36,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.get_version.outputs.VERSION }}
-        release_name: HisunAIMock-${{ steps.get_version.outputs.VERSION }}
+        tag_name: ${{ env.VERSION }}
+        release_name: HisunAIMock-${{ env.VERSION }}
         draft: false
         prerelease: false
 
@@ -48,6 +47,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hisunaimock-${{ steps.get_version.outputs.VERSION }}.vsix
-        asset_name: hisunaimock-${{ steps.get_version.outputs.VERSION }}.vsix
+        asset_path: ./hisunaimock-${{ env.VERSION }}.vsix
+        asset_name: hisunaimock-${{ env.VERSION }}.vsix
         asset_content_type: application/octet-stream
