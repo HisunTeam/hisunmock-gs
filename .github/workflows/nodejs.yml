@@ -1,0 +1,53 @@
+name: Node.js CI with Release
+
+on:
+  push:
+    branches:
+      - main  # 或你的默认分支
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.20.0
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install VSCE
+      run: npm install -g vsce
+
+    - name: Package Extension
+      run: |
+        echo y | vsce package
+
+    - name: Get Version from package.json
+      id: get_version
+      run: echo "::set-output name=VERSION::$(jq -r '.version' package.json)"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.get_version.outputs.VERSION }}
+        release_name: HisunAIMock-${{ steps.get_version.outputs.VERSION }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./hisunaimock-${{ steps.get_version.outputs.VERSION }}.vsix
+        asset_name: hisunaimock-${{ steps.get_version.outputs.VERSION }}.vsix
+        asset_content_type: application/octet-stream
