@@ -83,6 +83,10 @@ export function activate(context: vscode.ExtensionContext) {
             }
         });
 
+        if (!fileUri) {
+            return;
+        }
+
         updateStatusBarItem(myStatusBarItem, context, true, 'processing');
 
         if (fileUri && fileUri[0]) {
