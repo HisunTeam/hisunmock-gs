@@ -27,7 +27,7 @@ export async function generateOpenaiContent(outputChannel: vscode.OutputChannel,
             [method] 根据 [Method] 或 [请求方式] 获得值。
             [response] 根据[输出]中的表格来生成键值对, 键名(Key)根据列名为[参数名]或[字段名]来命名, 且它的属性值(Value)根据列名[参数名]或[字段名]结合[字段描述]猜测有可能输出的值并随机输出一个语种为中文并且不能为空字符串和 null，值的类型必须按照列名[类型]规则，如[备注]中有约定字段有可能的值按照约定值来输出。
             如果有多条输出请返回多个 JavaScript 对象, 并连接成数组。
-            必须只返回 JavaScript 对象不要返回 json 格式, 属性名不要用单引号或双引号包裹，不要返回其他不相关内容包括属性值的注释信息，返回格式如下
+            必须只返回 JavaScript 对象不要返回 json 格式, 属性名不要用单引号或双引号包裹并在它的后面注释含义，不要返回其他不相关内容，返回格式如下
             \`\`\`javascript
             {
                 url: "/",

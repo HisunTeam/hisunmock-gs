@@ -2,7 +2,7 @@
   "name": "hisunaimock",
   "displayName": "HisunAIMock",
   "description": "基于 AI 自动识别接口文档生成 Mock 数据",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "hisun",
   "icon": "hisunailogo.png",
   "engines": {
